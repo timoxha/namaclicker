@@ -5,12 +5,12 @@ from pgzero import clock
 
 WIDTH = 800
 HEIGHT = 500
-TITLE = "NamaClicker v1.0.0"
+TITLE = "NamaClicker"
 
 achievements_displayed = False
 condition_met = False
 
-ambient = random.randint(1,4)
+ambient = random.randint(1,7)
 if ambient == 1:
     sounds.ost1.play(-1)
 elif ambient == 2:
@@ -19,10 +19,32 @@ elif ambient == 3:
     sounds.ost3.play(-1)
 elif ambient == 4:
     sounds.ost4.play(-1)
-
+elif ambient == 5:
+    sounds.ost5.play(-1)
+elif ambient == 6:
+    sounds.ost6.play(-1)
+elif ambient == 7:
+    sounds.ost7.play(-1)
+"""
+def stop_music():
+    if ambient == 1:
+        sounds.ost1.stop()
+    elif ambient == 2:
+        sounds.ost2.stop()
+    elif ambient == 3:
+        sounds.ost3.stop()
+    elif ambient == 4:
+        sounds.ost4.stop()
+    elif ambient == 5:
+        sounds.ost5.stop()
+    elif ambient == 6:
+        sounds.ost6.stop()
+    elif ambient == 7:
+        sounds.ost7.stop()
+"""
 def random_tama():
     global tamas
-    rare = [1,12,11,1,5,2,2,2,2,3,3,3,4,4,5,6,6,7,9,8,8,7,9,10]
+    rare = [1,12,11,1,5,2,2,2,2,3,3,3,4,4,5,6,6,7,9,8,8,7,9,10,13,13,13,14,14,15,16]
     rare_choice = random.choice(rare)
     if rare_choice == 1:
         namatama.image = 'like'
@@ -60,6 +82,18 @@ def random_tama():
     elif rare_choice == 12:
         namatama.image = 'evil'
         tamas.append('12')
+    elif rare_choice == 13:
+        namatama.image = 'energy'
+        tamas.append('13')
+    elif rare_choice == 14:
+        namatama.image = 'santa'
+        tamas.append('14')
+    elif rare_choice == 15:
+        namatama.image = 'search'
+        tamas.append('15')
+    elif rare_choice == 16:
+        namatama.image = 'galaxy'
+        tamas.append('16')
 
 def hide_achi():
     global achievements_displayed
@@ -90,6 +124,7 @@ frame6 = Actor('frame', (700, 180))
 mode = 'menu'
 clicks = 0
 tamas = []
+show_plus_one = False
 
 def draw():
     global clicks, achievements_displayed, condition_met
@@ -115,7 +150,7 @@ def draw():
             screen.draw.text("Каждые 10 кликов, появляется новое изображение", center=(400,280), color='black', fontsize=(29))
             screen.draw.text("Нажми на Намутаму, чтобы начать", center=(400,300), color='black', fontsize=(35))
         screen.draw.text(str(clicks), center=(400,410), fontsize=75, color='black')
-        if '1' in tamas and '2' in tamas and '3' in tamas and '4' in tamas and '5' in tamas and '6' in tamas and '7' in tamas and '8' in tamas and '9' in tamas and '10' in tamas and '11' in tamas and '12' in tamas:
+        if '1' in tamas and '2' in tamas and '3' in tamas and '4' in tamas and '5' in tamas and '6' in tamas and '7' in tamas and '8' in tamas and '9' in tamas and '10' in tamas and '11' in tamas and '12' in tamas and '13' in tamas and '14' in tamas and '15' in tamas and '16' in tamas:
             if not achievements_displayed:
                 sounds.new_achievement.play()
                 achievements_displayed = True
@@ -138,6 +173,11 @@ def draw():
         elif clicks == 1000000:
             sounds.new_achievement.play()
             screen.draw.text("Новая очивка: God", center=(400,280), color='black')
+        x = random.randint(200,600)
+        y = random.randint(150,350)
+        random_x_y = (x, y)
+        if show_plus_one:
+            screen.draw.text(f"+ {boost}", center=random_x_y, fontsize=30, color="black")
     if mode == 'achievements':
         screen.fill('#9C4A1A')
         button_achi_back.draw()
@@ -157,26 +197,35 @@ def draw():
         if clicks >= 1000000:
             frame5.draw()
             screen.draw.text("God \nНаберите 1M кликов", center=(400,175), color='black')
-        if '1' in tamas and '2' in tamas and '3' in tamas and '4' in tamas and '5' in tamas and '6' in tamas and '7' in tamas and '8' in tamas and '9' in tamas and '10' in tamas and '11' in tamas and '12' in tamas:
+        if '1' in tamas and '2' in tamas and '3' in tamas and '4' in tamas and '5' in tamas and '6' in tamas and '7' in tamas and '8' in tamas and '9' in tamas and '10' in tamas and '11' in tamas and '12' in tamas and '13' in tamas and '14' in tamas and '15' in tamas and '16' in tamas:
             frame6.draw()
             screen.draw.text("Master \nСоберите все виды", center=(700, 180), color='black')
         else:
             screen.draw.text("Ты пока не получил ни одного достижения =(", center=(400,250), color='black')
     if mode == 'credits':
         screen.fill('#EC9704')
-        screen.draw.text('Спасибо за то, что играете в мою игру. \nРазработчик - timoxha \nТестер - timoxha \nХудожники - Embark Studios, Nexon Corp. \nВсе права принадлежат компании Embark Studios, и их продукту THE FINALS (C)', center=(400,250), fontsize=(28))
+        screen.draw.text('Спасибо за то, что играете в мою игру. \nРазработчик - timoxha \nТестер - timoxha \nКонтент - Embark Studios, Nexon Corp. \nВсе права принадлежат компании Embark Studios, и их продукту THE FINALS (C)', center=(400,250), fontsize=(28))
         button_credits_back.draw()
         screen.draw.text('Назад', center=(100,456))
     if mode == 'upd':
         screen.fill('#F7C815')
-        screen.draw.text('Обновление 1.0.0 \n-Релиз', center=(400,250), color='black')
+        screen.draw.text('Обновление 1.0.0\n-Добавление контента\n-Можно кликать на пробел\n-Gamejuice: когда игрок кликает, у него в рандомном месте пишется + и клик', center=(400,250), color='black')
         button_upd_back.draw()
         screen.draw.text("Назад", center=(100,466))
 
+def on_key_down(key):
+    global clicks, mode
+    if key == key.SPACE and mode == 'game':
+        clicks += 1 * boost
+        sounds.click.play()
+        if clicks % 10 == 0:
+            random_tama()
+
 def on_mouse_down(pos):
-    global clicks, mode, boost, price
+    global clicks, mode, boost, price, show_plus_one
     if mode == 'game':
         if namatama.collidepoint(pos):
+            show_plus_one = True
             clicks += 1 * boost
             sounds.click.play()
             if clicks % 10 == 0:
