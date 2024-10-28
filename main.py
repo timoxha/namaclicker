@@ -3,6 +3,7 @@ import random
 from time import sleep
 from pgzero import clock
 
+FPS = 60
 WIDTH = 800
 HEIGHT = 500
 TITLE = "NamaClicker"
@@ -10,7 +11,7 @@ TITLE = "NamaClicker"
 achievements_displayed = False
 condition_met = False
 
-ambient = random.randint(1,7)
+ambient = random.randint(1,8)
 if ambient == 1:
     sounds.ost1.play(-1)
 elif ambient == 2:
@@ -25,7 +26,9 @@ elif ambient == 6:
     sounds.ost6.play(-1)
 elif ambient == 7:
     sounds.ost7.play(-1)
-"""
+elif ambient == 8:
+    sounds.ost8.play(-1)
+
 def stop_music():
     if ambient == 1:
         sounds.ost1.stop()
@@ -41,7 +44,9 @@ def stop_music():
         sounds.ost6.stop()
     elif ambient == 7:
         sounds.ost7.stop()
-"""
+    elif ambient == 8:
+        sounds.ost8.stop()
+
 def random_tama():
     global tamas
     rare = [1,12,11,1,5,2,2,2,2,3,3,3,4,4,5,6,6,7,9,8,8,7,9,10,13,13,13,14,14,15,16]
@@ -100,9 +105,10 @@ def hide_achi():
     achievements_displayed = True
 
 namatama = Actor('classic', (400,150))
+nama_logo = Actor('like', (700,150))
 
 button_boost = Actor('button', (100,400))
-button_menu = Actor('button', (100,465))
+button_menu = Actor('button', (100,450))
 button_start = Actor('button', (400,250))
 button_achi = Actor('button', (400,200))
 button_credits = Actor('button', (400,300))
@@ -110,7 +116,6 @@ button_achi_back = Actor('button', (100,465))
 button_credits_back = Actor('button', (100,456))
 button_upd = Actor('button', (700,466))
 button_upd_back = Actor('button', (100,465))
-
 price = 250
 boost = 1
 
@@ -127,16 +132,17 @@ tamas = []
 show_plus_one = False
 
 def draw():
-    global clicks, achievements_displayed, condition_met
+    global clicks, achievements_displayed, condition_met, show_plus_one
     if mode == 'menu':
         screen.fill('#583E26')
+        nama_logo.draw()
         button_start.draw()
         button_achi.draw()
         button_credits.draw()
         screen.draw.text("Играть",center=(400,250))
         screen.draw.text("Ачивки",center=(400,200))
         screen.draw.text("Честь", center=(400,300))
-        screen.draw.text("NamaClicker", center=(400,100), fontsize=(100))
+        screen.draw.text("NamaClicker", center=(300,100), fontsize=(100))
         button_upd.draw()
         screen.draw.text("Обновления", center=(700,466))
     if mode == 'game':
@@ -145,7 +151,7 @@ def draw():
         button_boost.draw()
         screen.draw.text(f"Буст: + {boost} \n {price} Кликов", center=(100,402))
         button_menu.draw()
-        screen.draw.text("Меню", center=(100,465))
+        screen.draw.text("Меню", center=(100,450))
         if clicks == 0:
             screen.draw.text("Каждые 10 кликов, появляется новое изображение", center=(400,280), color='black', fontsize=(29))
             screen.draw.text("Нажми на Намутаму, чтобы начать", center=(400,300), color='black', fontsize=(35))
@@ -178,6 +184,7 @@ def draw():
         random_x_y = (x, y)
         if show_plus_one:
             screen.draw.text(f"+ {boost}", center=random_x_y, fontsize=30, color="black")
+            show_plus_one = False
     if mode == 'achievements':
         screen.fill('#9C4A1A')
         button_achi_back.draw()
@@ -209,9 +216,12 @@ def draw():
         screen.draw.text('Назад', center=(100,456))
     if mode == 'upd':
         screen.fill('#F7C815')
-        screen.draw.text('Обновление 1.0.0\n-Добавление контента\n-Можно кликать на пробел\n-Gamejuice: когда игрок кликает, у него в рандомном месте пишется + и клик', center=(400,250), color='black')
+        screen.draw.text('Обновление 1.2.0\n-Мелкие баги исправленны\n-Новые саундтреки\n-Наматама в главном меню', center=(400,250), color='black')
         button_upd_back.draw()
         screen.draw.text("Назад", center=(100,466))
+def on_mouse_move(pos):
+    if mode == 'catch_it':
+        nama_logo.pos = pos
 
 def on_key_down(key):
     global clicks, mode
@@ -260,6 +270,5 @@ def on_mouse_down(pos):
     if mode == 'upd':
         if button_upd_back.collidepoint(pos):
             mode = 'menu'
-    
 
 pgzrun.go()
