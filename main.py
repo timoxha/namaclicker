@@ -1,6 +1,5 @@
 import pgzrun
 import random
-from time import sleep
 from pgzero import clock
 
 FPS = 60
@@ -11,7 +10,7 @@ TITLE = "NamaClicker"
 achievements_displayed = False
 condition_met = False
 
-ambient = random.randint(1,8)
+ambient = random.randint(1,9)
 if ambient == 1:
     sounds.ost1.play(-1)
 elif ambient == 2:
@@ -28,24 +27,8 @@ elif ambient == 7:
     sounds.ost7.play(-1)
 elif ambient == 8:
     sounds.ost8.play(-1)
-
-def stop_music():
-    if ambient == 1:
-        sounds.ost1.stop()
-    elif ambient == 2:
-        sounds.ost2.stop()
-    elif ambient == 3:
-        sounds.ost3.stop()
-    elif ambient == 4:
-        sounds.ost4.stop()
-    elif ambient == 5:
-        sounds.ost5.stop()
-    elif ambient == 6:
-        sounds.ost6.stop()
-    elif ambient == 7:
-        sounds.ost7.stop()
-    elif ambient == 8:
-        sounds.ost8.stop()
+elif ambient == 9:
+    sounds.ost9.play(-1)
 
 def random_tama():
     global tamas
@@ -216,12 +199,9 @@ def draw():
         screen.draw.text('Назад', center=(100,456))
     if mode == 'upd':
         screen.fill('#F7C815')
-        screen.draw.text('Обновление 1.2.0\n-Мелкие баги исправленны\n-Новые саундтреки\n-Наматама в главном меню', center=(400,250), color='black')
+        screen.draw.text('Обновление beta-4\n-Когда нама появляется, у неё проигрывается звук появления\n-Новые саундтреки', center=(400,250), color='black')
         button_upd_back.draw()
         screen.draw.text("Назад", center=(100,466))
-def on_mouse_move(pos):
-    if mode == 'catch_it':
-        nama_logo.pos = pos
 
 def on_key_down(key):
     global clicks, mode
@@ -229,6 +209,7 @@ def on_key_down(key):
         clicks += 1 * boost
         sounds.click.play()
         if clicks % 10 == 0:
+            sounds.appear.play()
             random_tama()
 
 def on_mouse_down(pos):
@@ -239,6 +220,7 @@ def on_mouse_down(pos):
             clicks += 1 * boost
             sounds.click.play()
             if clicks % 10 == 0:
+                sounds.appear.play()
                 random_tama()
         if button_menu.collidepoint(pos):
             mode = 'menu'
