@@ -2,7 +2,6 @@ import pgzrun
 import random
 from pgzero import clock
 
-FPS = 60
 WIDTH = 800
 HEIGHT = 500
 TITLE = "NamaClicker"
@@ -90,6 +89,8 @@ def hide_achi():
 namatama = Actor('classic', (400,150))
 nama_logo = Actor('like', (700,150))
 
+bg = Actor('bg')
+
 button_boost = Actor('button', (100,400))
 button_menu = Actor('button', (100,450))
 button_start = Actor('button', (400,250))
@@ -129,44 +130,44 @@ def draw():
         button_upd.draw()
         screen.draw.text("Обновления", center=(700,466))
     if mode == 'game':
-        screen.fill('#A78B71')
+        bg.draw()
         namatama.draw()
         button_boost.draw()
         screen.draw.text(f"Буст: + {boost} \n {price} Кликов", center=(100,402))
         button_menu.draw()
         screen.draw.text("Меню", center=(100,450))
         if clicks == 0:
-            screen.draw.text("Каждые 10 кликов, появляется новое изображение", center=(400,280), color='black', fontsize=(29))
-            screen.draw.text("Нажми на Намутаму, чтобы начать", center=(400,300), color='black', fontsize=(35))
-        screen.draw.text(str(clicks), center=(400,410), fontsize=75, color='black')
+            screen.draw.text("Каждые 10 кликов, появляется новое изображение", center=(400,280), fontsize=(29))
+            screen.draw.text("Нажми на Намутаму, чтобы начать", center=(400,300), fontsize=(35))
+        screen.draw.text(str(clicks), center=(400,410), fontsize=75)
         if '1' in tamas and '2' in tamas and '3' in tamas and '4' in tamas and '5' in tamas and '6' in tamas and '7' in tamas and '8' in tamas and '9' in tamas and '10' in tamas and '11' in tamas and '12' in tamas and '13' in tamas and '14' in tamas and '15' in tamas and '16' in tamas:
             if not achievements_displayed:
                 sounds.new_achievement.play()
                 achievements_displayed = True
-                screen.draw.text("Новая очивка: Master", center=(400,280), color='black')
+                screen.draw.text("Новая очивка: Master", center=(400,280))
                 clock.schedule_unique(hide_achi, 1)
                 achievements_displayed = False
                 condition_met = True
         if clicks == 1000:
             sounds.new_achievement.play()
-            screen.draw.text("Новая очивка: Master Clicker", center=(400,280), color='black')
+            screen.draw.text("Новая очивка: Master Clicker", center=(400,280))
         elif clicks == 5000:
             sounds.new_achievement.play()
-            screen.draw.text("Новая очивка: Super Master CLicker", center=(400,280), color='black')
+            screen.draw.text("Новая очивка: Super Master CLicker", center=(400,280))
         elif clicks == 10000:
             sounds.new_achievement.play()
-            screen.draw.text("Новая очивка: BugUse", center=(400,280), color='black')
+            screen.draw.text("Новая очивка: BugUse", center=(400,280))
         elif clicks == 100000:
             sounds.new_achievement.play()
-            screen.draw.text("Новая очивка: Legend", center=(400,280), color='black')
+            screen.draw.text("Новая очивка: Legend", center=(400,280))
         elif clicks == 1000000:
             sounds.new_achievement.play()
-            screen.draw.text("Новая очивка: God", center=(400,280), color='black')
+            screen.draw.text("Новая очивка: God", center=(400,280))
         x = random.randint(200,600)
         y = random.randint(150,350)
         random_x_y = (x, y)
         if show_plus_one:
-            screen.draw.text(f"+ {boost}", center=random_x_y, fontsize=30, color="black")
+            screen.draw.text(f"+ {boost}", center=random_x_y, fontsize=30)
             show_plus_one = False
     if mode == 'achievements':
         screen.fill('#9C4A1A')
@@ -199,13 +200,17 @@ def draw():
         screen.draw.text('Назад', center=(100,456))
     if mode == 'upd':
         screen.fill('#F7C815')
-        screen.draw.text('Обновление beta-4\n-Когда нама появляется, у неё проигрывается звук появления\n-Новые саундтреки', center=(400,250), color='black')
+        screen.draw.text('Обновление beta-5\n-Звук при появлении намытамы поменялся\n-Исправлены баги', center=(400,250), color='black')
         button_upd_back.draw()
         screen.draw.text("Назад", center=(100,466))
+    if mode == 'background':
+        screen.fill('grey')
+
 
 def on_key_down(key):
-    global clicks, mode
+    global clicks, mode, show_plus_one
     if key == key.SPACE and mode == 'game':
+        show_plus_one = True
         clicks += 1 * boost
         sounds.click.play()
         if clicks % 10 == 0:
@@ -252,5 +257,6 @@ def on_mouse_down(pos):
     if mode == 'upd':
         if button_upd_back.collidepoint(pos):
             mode = 'menu'
+    
 
 pgzrun.go()
