@@ -89,8 +89,6 @@ def hide_achi():
 namatama = Actor('classic', (400,150))
 nama_logo = Actor('like', (700,150))
 
-bg = Actor('bg')
-
 button_boost = Actor('button', (100,400))
 button_menu = Actor('button', (100,450))
 button_start = Actor('button', (400,250))
@@ -109,6 +107,12 @@ frame3 = Actor('frame', (700, 50))
 frame4 = Actor('frame', (100, 180))
 frame5 = Actor('frame', (400, 180))
 frame6 = Actor('frame', (700, 180))
+
+dacha = Actor('dacha_bg')
+flat = Actor('flat_bg')
+mansion = Actor('mansion_bg')
+shalash = Actor('shalash_bg')
+trash = Actor('trash_bg')
 
 mode = 'menu'
 clicks = 0
@@ -130,7 +134,16 @@ def draw():
         button_upd.draw()
         screen.draw.text("Обновления", center=(700,466))
     if mode == 'game':
-        bg.draw()
+        if clicks <= 1000:
+            trash.draw()
+        if clicks >= 1000:
+            shalash.draw()
+        if clicks >= 5000:
+            dacha.draw()
+        if clicks >= 10000:
+            flat.draw()
+        if clicks >= 100000:
+            mansion.draw()
         namatama.draw()
         button_boost.draw()
         screen.draw.text(f"Буст: + {boost} \n {price} Кликов", center=(100,402))
@@ -153,7 +166,7 @@ def draw():
             screen.draw.text("Новая очивка: Master Clicker", center=(400,280))
         elif clicks == 5000:
             sounds.new_achievement.play()
-            screen.draw.text("Новая очивка: Super Master CLicker", center=(400,280))
+            screen.draw.text("Новая очивка: Super Master Clicker", center=(400,280))
         elif clicks == 10000:
             sounds.new_achievement.play()
             screen.draw.text("Новая очивка: BugUse", center=(400,280))
@@ -200,7 +213,7 @@ def draw():
         screen.draw.text('Назад', center=(100,456))
     if mode == 'upd':
         screen.fill('#F7C815')
-        screen.draw.text('Обновление beta-5\n-Звук при появлении намытамы поменялся\n-Исправлены баги', center=(400,250), color='black')
+        screen.draw.text('Обновление Patch 1\n-Звук кликания поменялся\n-Исправлены баги\n-При достижении обределённого кол-во кликов, будет меняться задний фон', center=(400,250), color='black')
         button_upd_back.draw()
         screen.draw.text("Назад", center=(100,466))
     if mode == 'background':
@@ -257,6 +270,5 @@ def on_mouse_down(pos):
     if mode == 'upd':
         if button_upd_back.collidepoint(pos):
             mode = 'menu'
-    
 
 pgzrun.go()
